@@ -1,5 +1,5 @@
 import express from 'express';
-import { getData } from './scraper/djlist';
+import djList from './scraper/djlist';
 
 const app = express();
 const PORT = 9090;
@@ -10,7 +10,14 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/events', (req, res) => res.status(200).send(getData()));
-app.get('/events/:location', (req, res) => res.status(200).send(getData(req.params.location)));
+app.get('/events', (req, res) => {
+  const cache = djList.getCache();
+  res.status(200).send(cache);
+});
+
+app.get('/events/:location', (req, res) => {
+  const cache = djList.getCache(req.params.location);
+  res.status(200).send(cache);
+});
 
 app.listen(PORT, () => console.log(`RUNNING ON PORT ${PORT}`));
