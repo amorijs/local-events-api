@@ -2,6 +2,22 @@
 import rp from 'request-promise';
 import cheerio from 'cheerio';
 
+let cache = [];
+
+const updateCache = function() {
+  console.log('Updating djlist cache...');
+  fetchData()
+    .then(data => (cache = data))
+    .then(() => console.log('Successfully updated djlist cache.'))
+    .catch(err => console.log(`Could not update djlist cache ${err.message}`));
+};
+
+const fetchData = function() {
+  return getEvents('http://thedjlist.com/events/los-angeles-us/')
+    .then(data => sortByDate(data))
+    .catch(e => console.log(e));
+};
+
 const getEvents = async function(url) {
   try {
     const html = await rp(url);
@@ -54,6 +70,12 @@ const parseDate = function(dateElement) {
   return new Date(dateString + '2017');
 };
 
+const parseUrl = function(onClickString) {
+  const startIndex = onClickString.indexOf("'");
+  const endIndex = onClickString.indexOf("'", startIndex + 1);
+  return onClickString.slice(startIndex + 1, endIndex);
+};
+
 const getEventPageData = async function(url) {
   try {
     const html = await rp(url);
@@ -64,31 +86,10 @@ const getEventPageData = async function(url) {
   }
 };
 
-const parseUrl = function(onClickString) {
-  const startIndex = onClickString.indexOf("'");
-  const endIndex = onClickString.indexOf("'", startIndex + 1);
-  return onClickString.slice(startIndex + 1, endIndex);
-};
-
 const sortByDate = data => data.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-const fetchData = function() {
-  return getEvents('http://thedjlist.com/events/los-angeles-us/')
-    .then(data => sortByDate(data))
-    .catch(e => console.log(e));
-};
-
-const updateCache = cache => {
-  console.log('Updating djlist cache...');
-  fetchData()
-    .then(data => (cache = data))
-    .then(() => console.log('Successfully updated djlist cache.'))
-    .catch(err => console.log(`Could not update djlist cache ${err.message}`));
-};
-
-let cache = [];
-updateCache(cache);
-setInterval(() => updateCache(cache), 60 * 1000 * 10);
+updateCache();
+setInterval(() => updateCache(), 60 * 1000 * 10);
 const getCache = () => cache;
 
 module.exports = { getCache };
