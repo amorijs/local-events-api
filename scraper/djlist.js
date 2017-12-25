@@ -1,6 +1,6 @@
 'use strict';
-const rp = require('request-promise');
-const cheerio = require('cheerio');
+import rp from 'request-promise';
+import cheerio from 'cheerio';
 
 const getEvents = async function(url) {
   try {
