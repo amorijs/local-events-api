@@ -7,12 +7,14 @@
   "author": "Chris Amori <chris.amori93@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.0",
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.1",
     "global": "^4.3.2",
     "request-promise": "^4.2.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.0"
   },
   "scripts": {
     "start": "npm run build && node ./dist",
