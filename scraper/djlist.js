@@ -84,11 +84,14 @@ const getEventPageData = async function(url) {
 
 const sortByDate = data => data.sort((a, b) => new Date(a.date) - new Date(b.date));
 
+const minutesToMS = minutes => 60 * minutes * 1000;
+
 const getCache = () => cache;
 
 const initializeUpdateInterval = function() {
   updateCache();
-  setInterval(() => updateCache(), 60 * 1000 * 10);
+  const intervalMS = minutesToMS(10);
+  setInterval(updateCache, intervalMS);
 };
 
 module.exports = { getCache, initializeUpdateInterval };
