@@ -1,5 +1,6 @@
 import express from 'express';
 import djList from './scraper/djlist';
+djList.initializeUpdateInterval();
 
 const app = express();
 const PORT = 9090;
