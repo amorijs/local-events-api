@@ -6,16 +6,12 @@ let cache = [];
 
 const updateCache = function() {
   console.log('Updating djlist cache...');
-  fetchData()
-    .then(data => (cache = data))
+
+  getEvents('http://thedjlist.com/events/los-angeles-us/')
+    .then(data => sortByDate(data))
+    .then(sortedData => (cache = sortedData))
     .then(() => console.log('Successfully updated djlist cache.'))
     .catch(err => console.log(`Could not update djlist cache ${err.message}`));
-};
-
-const fetchData = function() {
-  return getEvents('http://thedjlist.com/events/los-angeles-us/')
-    .then(data => sortByDate(data))
-    .catch(e => console.log(e));
 };
 
 const getEvents = async function(url) {
